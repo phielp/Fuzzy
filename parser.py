@@ -3,6 +3,7 @@
 import requests
 import traceback
 import time
+import sys
 from lxml import html
 import datetime
 
@@ -48,4 +49,4 @@ def scrape_genres(start_index, number_of_books_at_once):
     print datetime.datetime.now() - starttime
 
 if __name__ == '__main__':
-    scrape_genres(sys.argv[1], sys.argv[2])
+    scrape_genres(int(sys.argv[1]), int(sys.argv[2]))
