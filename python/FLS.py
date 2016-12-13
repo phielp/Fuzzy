@@ -5,6 +5,7 @@
 
 # https://nl.mathworks.com/help/matlab/matlab-engine-for-python.html
 import matlab.engine
+import operator
 
 # open connection with MATLAB
 engine = matlab.engine.connect_matlab()
@@ -24,41 +25,54 @@ def FLS(n):
 		userAge = int(rest[0])
 		ratedBooks = rest[1]
 
-		final = getOutput(ratedBooks)
+		preference = getUserPrefrence(ratedBooks)
 
+		print userID, preference[0:5]
+		print "\n"
 
 # call MATLAB Fuzzy Toolbox
 def fuzzyMatlab(rating, member):
 	result = engine.FLS(rating, member)
 	return result
 
-# return crisp output of FLS
-def getOutput(ratedBooks):
-	output = []
-	print "Rated Books 1 user: ", ratedBooks
+# return user preferences in order of liking
+def getUserPrefrence(ratedBooks):
 
+	preferences = {}
+	genreCounts = {}
 	for i in range(len(ratedBooks)):
 		isbn, rating = ratedBooks[i]
 		rating = float(rating)
 		genres = getGenreMembers(isbn)
 
-		results = []
+		# if there is genre information in data
 		if genres is not None:
-			print "Genre member: ", isbn, genres
 
+			# calculate weight per genre
 			for j in range(len(genres)):
 				genre, member = genres[j]
 				member = float(member)
-				results.append(fuzzyMatlab(rating,member))
-			output.append(results)
 
-	print "FLS output: ", output
+				# add weights together if genre exists in preferences
+				if genre in preferences:
+					preferences[genre] += fuzzyMatlab(rating,member)
+					genreCounts[genre] += 1
+				else:
+					preferences[genre] = fuzzyMatlab(rating,member)
+					genreCounts[genre] = 1
 
-	return output
+	# normalize for recurring genres
+	for key, value in preferences.iteritems():
+		normal = genreCounts[key]
+		preferences[key] = value / normal
+
+	# sort list
+	sortedPreferences = sorted(preferences.items(), key=operator.itemgetter(1), reverse=True)
+
+	return sortedPreferences
 
 # get a list of genre memberships for a book
 def getGenreMembers(isbn):
-	# open isb lookup (genre meberships)
 	genre_members = open('data/membership_of_genres.csv','r')
 
 	for number, line in enumerate(genre_members, 0):
@@ -67,6 +81,24 @@ def getGenreMembers(isbn):
 			genres = eval(elems[1])
 			genre_members.close()
 			return genres
+
+# makes a list of all different genres in the data
+def createGenreSet():
+	genre_members = open('data/membership_of_genres.csv','r')
+	allGenres = []
+	allGenres = set(allGenres)
+	line = genre_members.readline()
+	while line:
+		elems = line.split(';')
+		genres = eval(elems[1])
+		for i in range(len(genres)):
+			genre, member = genres[i]
+			if member not in allGenres:
+				allGenres.add(genre)
+		
+		line = genre_members.readline()
+	genre_members.close()
+	print len(allGenres)
 
 # main
 FLS(10)
