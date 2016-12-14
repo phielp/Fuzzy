@@ -28,7 +28,8 @@ function [u] = FLS(UserRating, GenreRating)
 
     a = addmf(a,'output',1,'non-preffered','trapmf',[0 0 3 5]);
     a = addmf(a,'output',1,'indifferent','trimf',[3 5 7]);
-    a = addmf(a,'output',1,'preffered','trapmf',[5 7 10 10]);
+    a = addmf(a,'output',1,'interestedIn','trapmf',[5 7 8 8.5]);
+    a = addmf(a,'output',1,'preffered','trapmf',[6 9 11 14]);
 
     % input1, input2, output, weight, operator(1=AND, 2=OR)
     rule1 = [1 1 2 1 1];
@@ -41,19 +42,19 @@ function [u] = FLS(UserRating, GenreRating)
     a = addrule(a,rule4);
     rule5 = [2 2 2 1 1];
     a = addrule(a,rule5);
-    rule6 = [2 1 1 1 1];
+    rule6 = [2 1 1 0.2 1];
     a = addrule(a,rule6);
     rule7 = [3 3 3 1 1];
     a = addrule(a,rule7);
-    rule8 = [3 2 3 1 1];
+    rule8 = [3 2 3 0.8 1];
     a = addrule(a,rule8);
     rule9 = [3 1 2 1 1];
     a = addrule(a,rule9);
-    rule10 = [4 3 3 1 1];
+    rule10 = [4 3 4 1 1];
     a = addrule(a,rule10);
-    rule11 = [4 2 3 1 1];
+    rule11 = [4 2 4 0.8 1];
     a = addrule(a,rule11);
-    rule12 = [4 1 1 1 1];
+    rule12 = [4 1 2 1 1];
     a = addrule(a,rule12);
 
     % calculate output

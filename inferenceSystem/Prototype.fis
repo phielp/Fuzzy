@@ -1,0 +1,52 @@
+[System]
+Name='Prototype2'
+Type='mamdani'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=12
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='userRating'
+Range=[1 10]
+NumMFs=4
+MF1='disliked':'trapmf',[0 0 4 5]
+MF2='indifferent':'trimf',[3 5 7]
+MF3='liked':'trapmf',[5 7 8 9]
+MF4='loved':'trapmf',[7.5 9 10 10]
+
+[Input2]
+Name='genreRating'
+Range=[0 1]
+NumMFs=3
+MF1='low':'gaussmf',[0.25 0]
+MF2='medium':'gaussmf',[0.1 0.5]
+MF3='high':'gaussmf',[0.25 1]
+
+[Output1]
+Name='preference'
+Range=[1 10]
+NumMFs=4
+MF1='non-preffered':'trapmf',[0 0 3 5]
+MF2='indifferent':'trimf',[3 5 7]
+MF3='preffered':'trapmf',[6 9 11 14]
+MF4='interestedIn':'trapmf',[5 7 8 8.5]
+
+[Rules]
+1 1, 2 (1) : 1
+1 2, 1 (1) : 1
+1 3, 1 (1) : 1
+2 3, 2 (1) : 1
+2 2, 2 (1) : 1
+2 1, 1 (0.1) : 1
+3 3, 4 (1) : 1
+3 2, 4 (1) : 1
+3 1, 2 (1) : 1
+4 3, 3 (1) : 1
+4 2, 3 (1) : 1
+4 1, 2 (1) : 1
