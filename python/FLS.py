@@ -12,13 +12,16 @@ engine = matlab.engine.connect_matlab()
 
 # open dataset
 user_ratings = open('data/new_ratings.csv','r')
+# new_file = open('data/user_preferences.csv','w')
 
 # main
 def FLS(n):
-	# iterate first n users
+	
+	# line = user_ratings.readline()
+	count = 0
+
 	for i in range(n):
 		line = user_ratings.readline()
-
 		elems = line.split(';')
 		userID = int(elems[0])
 		rest = eval(elems[1])
@@ -27,8 +30,17 @@ def FLS(n):
 
 		preference = getUserPrefrence(ratedBooks)
 
-		print userID, preference[0:5]
-		print "\n"
+		# preftext = str(preference)
+		# text = str(userID) + ';' + preftext + '\n'
+
+		# new_file.write(text)
+		# line = user_ratings.readline()
+		# if count % 500 == 0:
+		# 	print count
+		# count += 1
+
+		print userID, preference
+		print '\n'
 
 # call MATLAB Fuzzy Toolbox
 def fuzzyMatlab(rating, member):
@@ -98,10 +110,10 @@ def createGenreSet():
 		
 		line = genre_members.readline()
 	genre_members.close()
-	print len(allGenres)
-
+	return allGenres
+	
 # main
-FLS(10)
+FLS(2)
 
 # close connection with MATLAB
 engine.quit()
