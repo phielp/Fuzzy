@@ -1,4 +1,4 @@
-from evaluation_absolute_distance import evaluate, recommend, extract_book_titles
+from recommend import give_similar_users, recommend, extract_book_titles
 
 if __name__ == '__main__':
 	membership_file = open('../data/membership_of_genres.csv', 'r')
@@ -31,5 +31,5 @@ if __name__ == '__main__':
  			user_preferences["'{}'".format(str(elems[0]))] = int(elems[1])
  		user_input = raw_input()
  	#print user_preferences
- 	print recommend(evaluate(user_preferences))
+ 	print recommend(give_similar_users(user_preferences))
 
